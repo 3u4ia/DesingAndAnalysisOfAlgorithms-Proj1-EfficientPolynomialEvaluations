@@ -16,9 +16,8 @@ public class Main {
         //repeated squaring technique
 
         // graphic design x marketing
-
         BigInteger answer = new BigInteger("0");
-        answer = formula(6000, BigInteger.valueOf(690));
+        answer = formula(9999, BigInteger.valueOf(123));// n was 25
         System.out.println(answer);
 
     }
@@ -44,5 +43,5 @@ public class Main {
 
 
 // we can set d all the coefficients are randomly generated
-    //one file oding brute force and one file doing another one
+    //one file doing brute force and one file doing another one
 }

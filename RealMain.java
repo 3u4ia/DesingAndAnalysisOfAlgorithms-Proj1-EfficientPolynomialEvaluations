@@ -1,3 +1,6 @@
+// This project uses three algorithms to solve a chosen randomized polynomial and checks the time to compare how fast each one is compared to the other.
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,9 +10,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class RealMain {
-    public static void main(String[] args) {
-        int n = 3;
-        int d = 2;
+    public static void main(String[] args) throws FileNotFoundException {
+        int n = 6000;
+        int d = 5;
         String answerFile = "answerData.txt";
         String generatedFile = "generated.txt";
         RealMain randomizerObj = new RealMain();
@@ -30,8 +33,7 @@ public class RealMain {
 
 
         try(PrintWriter writer = new PrintWriter(generatedFile)){
-            writer.println(x);
-            writer.println(n);
+            writer.println(x);  //This makes the format of the file x then the coefficients preceed after it
             for(int i = 0; i < coeffs.length; i++){
                 writer.println(coeffs[i]);
             }
@@ -42,25 +44,20 @@ public class RealMain {
 
 
         File readFile = new File(generatedFile);
-        try {
-            Scanner scanObj = new Scanner(readFile);
-            int isX = scanObj.nextInt();
-            int isN = scanObj.nextInt();
-            int[] coefficients = new int[n+1];
-            int j = 0;
-            for(int i = 0; i < coefficients.length; i++){
-                coefficients[i] = scanObj.nextInt();
-            }
-            scanObj.close();
-            System.out.println("HEEEEEYYYYYYYYYY\n\n");
-            for(int i =0; i < coefficients.length; i++){
-                System.out.println(coefficients[i]);
-            }
-            scanObj.close();
+
+        Scanner scanObj = new Scanner(readFile);
+        int isX = scanObj.nextInt(); // reads the first number for X
+        int[] coefficients = new int[n+1];
+        for(int i = 0; i < coefficients.length; i++){
+            coefficients[i] = scanObj.nextInt();
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        scanObj.close();
+
+
+
+
+
+
 
 
 
@@ -72,28 +69,36 @@ public class RealMain {
         bruteTime = endTime - startTime;
 
         startTime = System.currentTimeMillis();
-        repeatAnswer = repeatObj.formula(x, coeffs);
+        bruteAnswer = bruteObj.formula(BigInteger.valueOf(isX), coefficients);
+        endTime = System.currentTimeMillis();
+        bruteTime = endTime - startTime;
+
+        startTime = System.currentTimeMillis();
+        repeatAnswer = repeatObj.formula(isX, coefficients);
         endTime = System.currentTimeMillis();
         repeatTime = endTime - startTime;
 
         startTime = System.currentTimeMillis();
-        hornerAnswer = hornerObj.horner(x, coeffs);
+        hornerAnswer = hornerObj.horner(isX, coefficients);
         endTime = System.currentTimeMillis();
         hornerTime = endTime - startTime;
 
 
 
+
         try(PrintWriter writer = new PrintWriter(answerFile)){
-            writer.println("Answer for bruteForce: " + bruteAnswer);
-            writer.println("It took " + bruteTime + " seconds \n");
+            writer.println("Answer for bruteForce:        " + bruteAnswer);
+            writer.println("It took " + bruteTime + " milliseconds \n");
             writer.println("Answer for repeatSquaringTech " + repeatAnswer);
-            writer.println("It took " + repeatTime + " seconds \n");
-            writer.println("Answer for Horner's rule " + hornerAnswer);
-            writer.println("It took " + hornerTime + " seconds");
+            writer.println("It took " + repeatTime + " milliseconds \n");
+            writer.println("Answer for Horner's rule      " + hornerAnswer);
+            writer.println("It took " + hornerTime + " milliseconds");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
 
 
 
@@ -112,9 +117,6 @@ public class RealMain {
             coeffs[i] = generateRandomWithDigits(d);
         }
         System.out.println("\n");
-        for (int coeff : coeffs) {
-            System.out.println(coeff);
-        }
         return coeffs;
     }
     public int generateRandomWithDigits(int d) {
